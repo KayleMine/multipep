@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static multipep.MainFrame;
@@ -32,49 +33,48 @@ namespace multipep
         private DataGridViewTextBoxColumn loginColumn = new DataGridViewTextBoxColumn();
         private DataGridViewTextBoxColumn passwordColumn = new DataGridViewTextBoxColumn();
         private DataGridViewTextBoxColumn noteColumn = new DataGridViewTextBoxColumn();
+        private DataGridViewCheckBoxColumn checkboxColumn = new DataGridViewCheckBoxColumn();
+
         public MainFrame()
         {
             InitializeComponent();
+            setup_all();
+        }
+
+        private void setup_all()
+        {
             RemoveAccount.Enabled = false;
-            dataGridView1.AllowUserToAddRows = false;
-            // this.FormBorderStyle = FormBorderStyle.FixedSingle;
-            DataGridViewCheckBoxColumn checkboxColumn = new DataGridViewCheckBoxColumn();
+            DataTable.AllowUserToAddRows = false;
+
             checkboxColumn.HeaderText = "Selected";
             checkboxColumn.Name = "Selected";
             checkboxColumn.Width = 15;
-            dataGridView1.Columns.Add(checkboxColumn);
+            DataTable.Columns.Add(checkboxColumn);
 
             loginColumn.HeaderText = "Login";
             loginColumn.Name = "Login";
             loginColumn.ReadOnly = true;
-            dataGridView1.Columns.Add(loginColumn);
-            dataGridView1.RowHeadersVisible = false;
-            dataGridView1.ColumnHeadersVisible = false;
-            dataGridView1.BorderStyle = BorderStyle.FixedSingle;
-            dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.Single;
-            dataGridView1.GridColor = Color.FromArgb(220, 220, 198);
+            DataTable.Columns.Add(loginColumn);
+
+            DataTable.RowHeadersVisible = false;
+            DataTable.ColumnHeadersVisible = false;
+            DataTable.BorderStyle = BorderStyle.FixedSingle;
+            DataTable.CellBorderStyle = DataGridViewCellBorderStyle.Single;
+            DataTable.GridColor = Color.FromArgb(220, 220, 198);
 
             passwordColumn.HeaderText = "Password";
             passwordColumn.Name = "Password";
             passwordColumn.ReadOnly = true;
-            dataGridView1.Columns.Add(passwordColumn);
+            DataTable.Columns.Add(passwordColumn);
 
             noteColumn.HeaderText = "Note";
             noteColumn.Name = "Note";
             noteColumn.ReadOnly = true;
-            dataGridView1.Columns.Add(noteColumn);
+            DataTable.Columns.Add(noteColumn);
 
             accountsBindingList = new BindingList<Account>(accounts);
-            dataGridView1.DataSource = accountsBindingList;
-
+            DataTable.DataSource = accountsBindingList;
         }
-
-        private void MainFrame_Load(object sender, EventArgs e)
-        {
-            LoadAccounts();
-            RefreshTable();
-        }
-
 
         private void LoadAccounts()
         {
@@ -94,9 +94,27 @@ namespace multipep
             string json = JsonConvert.SerializeObject(accounts);
             File.WriteAllText("accounts.json", json);
         }
+
+        private void RefreshTable()
+        {
+            DataTable.DataSource = null;
+            DataTable.Rows.Clear();
+            foreach (Account account in accounts)
+            {
+                if (ShowPwd.Checked)
+                {
+                    DataTable.Rows.Add(account.Selected, account.Login, account.Password, account.Note);
+                }
+                else
+                {
+                    DataTable.Rows.Add(account.Selected, account.Login, "********", account.Note);
+                }
+            }
+        }
+
         private void RemoveSelectedAccount()
         {
-            foreach (DataGridViewRow row in dataGridView1.SelectedRows)
+            foreach (DataGridViewRow row in DataTable.SelectedRows)
             {
                 string login = row.Cells["Login"].Value.ToString();
                 string password = row.Cells["Password"].Value.ToString();
@@ -114,57 +132,69 @@ namespace multipep
             accountsBindingList.ResetBindings();
         }
 
-        private void RefreshTable()
+        private void MainFrame_Load(object sender, EventArgs e)
         {
-            dataGridView1.DataSource = null;
-            dataGridView1.Rows.Clear();
-            foreach (Account account in accounts)
-            {
-                if (ShowPwd.Checked)
-                {
-                    dataGridView1.Rows.Add(account.Selected, account.Login, account.Password, account.Note);
-                }
-                else
-                {
-                    dataGridView1.Rows.Add(account.Selected, account.Login, "********", account.Note);
-                }
-            }
+            LoadAccounts();
+            RefreshTable();
         }
 
         private void AddAccount_Click(object sender, EventArgs e)
         {
-            accounts.Add(new Account { Login = textBox1.Text, Password = textBox2.Text , Note = textBox3.Text });
+            accounts.Add(new Account
+            {
+                Login = textBox1.Text,
+                Password = textBox2.Text,
+                Note = textBox3.Text
+            });
             SaveAccounts();
             RefreshTable();
         }
+
         private void RemoveAccount_Click(object sender, EventArgs e)
         {
             RemoveSelectedAccount();
         }
-        private void LaunchTargetApp(string login, string password)
-        {
-            MyIni.Write("AccountName", login, Section);
-            MyIni.Write("AccountPassword", password, Section);
 
-            Process apepProcess = new Process();
-            apepProcess.StartInfo.FileName = "apep.exe";
-            apepProcess.Start();
-
-            apepProcess.WaitForExit();
-        }
-        private void StartAll_Click(object sender, EventArgs e)
+        private async Task LaunchTargetAppAsync(string accountName, string accountPassword)
         {
-            foreach (DataGridViewRow row in dataGridView1.Rows)
+            MyIni.Write("AccountName", accountName, Section);
+            MyIni.Write("AccountPassword", accountPassword, Section);
+
+            using (Process apepProcess = new Process())
             {
-                DataGridViewCheckBoxCell chk = row.Cells["Selected"] as DataGridViewCheckBoxCell;
-                if (chk.Value != null && (bool)chk.Value)
+                apepProcess.StartInfo.FileName = "apep.exe";
+                apepProcess.Start();
+
+                await Task.Run(() => apepProcess.WaitForExit());
+            }
+        }
+
+        private async Task StartAllAsync()
+        {
+            foreach (DataGridViewRow row in DataTable.Rows)
+            {
+                if (row.Cells["Selected"].Value is bool selected && selected)
                 {
-                    string login = row.Cells["Login"].Value.ToString();
-                    string password = ShowPwd.Checked ? row.Cells["Password"].Value.ToString() : GetAccountPassword(login);
-                    LaunchTargetApp(login, password);
+                    string accountName = row.Cells["Login"].Value.ToString();
+                    string accountPassword = ShowPwd.Checked ? row.Cells["Password"].Value.ToString() : GetAccountPassword(accountName);
+
+                    try
+                    {
+                        await LaunchTargetAppAsync(accountName, accountPassword);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"{ex}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
         }
+
+        private async void StartAll_Click(object sender, EventArgs e)
+        {
+            await StartAllAsync();
+        }
+
         private string GetAccountPassword(string login)
         {
             Account account = accounts.FirstOrDefault(acc => acc.Login == login);
@@ -191,32 +221,28 @@ namespace multipep
             RefreshTable();
         }
 
-        private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        private void DataTable_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
             {
-                DataGridViewRow row = dataGridView1.Rows[e.RowIndex];
+                DataGridViewRow row = DataTable.Rows[e.RowIndex];
                 string login = row.Cells["Login"].Value.ToString();
                 string password = row.Cells["Password"].Value.ToString();
                 string note = row.Cells["Note"].Value.ToString();
                 bool selected = (bool)row.Cells["Selected"].Value;
 
                 Account account = accounts[e.RowIndex];
-                if (ShowPwd.Checked) { 
-                account.Login = login;
-                account.Password = password;
-                account.Note = note;
+                if (ShowPwd.Checked)
+                {
+                    account.Login = login;
+                    account.Password = password;
+                    account.Note = note;
                 }
                 account.Selected = selected;
 
                 SaveAccounts();
             }
             RefreshTable();
-        }
-
-        private void Exit_Click(object sender, EventArgs e)
-        {
-            this.Close();
         }
 
         private void MainFrame_MouseDown(object sender, MouseEventArgs e)
@@ -228,9 +254,11 @@ namespace multipep
                 SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
             }
         }
+        private void Exit_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
-
-
 
     public class Account
     {
