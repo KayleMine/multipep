@@ -1,7 +1,7 @@
 
 # Seth
  <p align="left">
-  <img width="550" height="350" src="https://i.imgur.com/Cla2glo.png">
+  <img width="792" height="445" src="https://i.imgur.com/Cla2glo.png">
 </p>
 
 Bored launching two or more accounts every-time?
