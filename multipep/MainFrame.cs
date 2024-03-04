@@ -28,32 +28,53 @@ namespace multipep
 
         private List<Account> accounts = new List<Account>();
         private BindingList<Account> accountsBindingList;
-        private InIReader MyIni = new InIReader("Apep.ini");
         private static string Section = "Settings";
         private DataGridViewTextBoxColumn loginColumn = new DataGridViewTextBoxColumn();
         private DataGridViewTextBoxColumn passwordColumn = new DataGridViewTextBoxColumn();
         private DataGridViewTextBoxColumn noteColumn = new DataGridViewTextBoxColumn();
         private DataGridViewCheckBoxColumn checkboxColumn = new DataGridViewCheckBoxColumn();
-
+        private DataGridViewTextBoxColumn WoWColumn = new DataGridViewTextBoxColumn();
+        private RunAsLibrary.Api Api = new RunAsLibrary.Api();
+        private ToolTip toolTip1 = new ToolTip();
         public MainFrame()
         {
             InitializeComponent();
             setup_all();
+            setup_tooltip();
+        }
+
+        private void setup_tooltip()
+        {
+            // Set up the delays for the ToolTip.
+            toolTip1.AutoPopDelay = 5000;
+            toolTip1.InitialDelay = 1000;
+            toolTip1.ReshowDelay = 500;
+            // Force the ToolTip text to be displayed whether or not the form is active.
+            toolTip1.ShowAlways = true;
+
+            // Set up the ToolTip text for the Button and Checkbox.
+            toolTip1.SetToolTip(this.SymLinkByPass_c, "For those who have problems\nWith Symbolic Link's writing permissions.");
+            toolTip1.SetToolTip(this.MoP_AltInjection_c, "Alernative method of injection, only for MoP.");
+            toolTip1.SetToolTip(this.wotlk_WardenLog_c, "Who that pokemon?");
+
         }
 
         private void setup_all()
         {
             RemoveAccount.Enabled = false;
             DataTable.AllowUserToAddRows = false;
-
+            DataTable.AllowUserToResizeRows = false;
+            DataTable.AllowUserToResizeColumns = false;
+      
             checkboxColumn.HeaderText = "Selected";
             checkboxColumn.Name = "Selected";
-            checkboxColumn.Width = 15;
+            checkboxColumn.Width = 40;
             DataTable.Columns.Add(checkboxColumn);
 
             loginColumn.HeaderText = "Login";
             loginColumn.Name = "Login";
             loginColumn.ReadOnly = true;
+            loginColumn.Width = 100;
             DataTable.Columns.Add(loginColumn);
 
             DataTable.RowHeadersVisible = false;
@@ -65,11 +86,19 @@ namespace multipep
             passwordColumn.HeaderText = "Password";
             passwordColumn.Name = "Password";
             passwordColumn.ReadOnly = true;
+            passwordColumn.Width = 100;
             DataTable.Columns.Add(passwordColumn);
+
+            WoWColumn.HeaderText = "WoW";
+            WoWColumn.Name = "WoW";
+            WoWColumn.ReadOnly = true;
+            WoWColumn.Width = 205;
+            DataTable.Columns.Add(WoWColumn);
 
             noteColumn.HeaderText = "Note";
             noteColumn.Name = "Note";
             noteColumn.ReadOnly = true;
+            noteColumn.Width = 143;
             DataTable.Columns.Add(noteColumn);
 
             accountsBindingList = new BindingList<Account>(accounts);
@@ -103,33 +132,55 @@ namespace multipep
             {
                 if (ShowPwd.Checked)
                 {
-                    DataTable.Rows.Add(account.Selected, account.Login, account.Password, account.Note);
+                    DataTable.Rows.Add(account.Selected, account.Login, account.Password, account.WoW, account.Note);
                 }
                 else
                 {
-                    DataTable.Rows.Add(account.Selected, account.Login, "********", account.Note);
+                    DataTable.Rows.Add(account.Selected, account.Login, "********", account.WoW, account.Note);
                 }
             }
         }
 
         private void RemoveSelectedAccount()
         {
-            foreach (DataGridViewRow row in DataTable.SelectedRows)
+            bool anySelected = false;
+            foreach (DataGridViewRow row in DataTable.Rows)
             {
-                string login = row.Cells["Login"].Value.ToString();
-                string password = row.Cells["Password"].Value.ToString();
-
-                Account accountToRemove = accounts.FirstOrDefault(acc => acc.Login == login && acc.Password == password);
-
-                if (accountToRemove != null)
+                if (row.Cells["Selected"].Value != null && (bool)row.Cells["Selected"].Value)
                 {
-                    accounts.Remove(accountToRemove);
+                    anySelected = true;
+                    break;
                 }
             }
 
-            SaveAccounts();
-            RefreshTable();
-            accountsBindingList.ResetBindings();
+            if (!anySelected)
+            {
+                MessageBox.Show("No accounts selected to delete.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            DialogResult result = MessageBox.Show("Are you sure you want to delete checked accounts?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (result == DialogResult.Yes)
+            {
+                List<int> rowsToRemove = new List<int>();
+
+                for (int i = 0; i < DataTable.Rows.Count; i++)
+                {
+                    if (DataTable.Rows[i].Cells["Selected"].Value != null &&
+                        (bool)DataTable.Rows[i].Cells["Selected"].Value)
+                    {
+                        rowsToRemove.Add(i);
+                    }
+                }
+
+                foreach (int rowIndex in rowsToRemove.OrderByDescending(x => x))
+                {
+                    DataTable.Rows.RemoveAt(rowIndex);
+                    accounts.RemoveAt(rowIndex);
+                }
+
+                SaveAccounts();
+            }
         }
 
         private void MainFrame_Load(object sender, EventArgs e)
@@ -144,7 +195,8 @@ namespace multipep
             {
                 Login = textBox1.Text,
                 Password = textBox2.Text,
-                Note = textBox3.Text
+                Note = textBox3.Text,
+                WoW = textBox4.Text
             });
             SaveAccounts();
             RefreshTable();
@@ -155,14 +207,57 @@ namespace multipep
             RemoveSelectedAccount();
         }
 
-        private async Task LaunchTargetAppAsync(string accountName, string accountPassword)
+        private async Task LaunchTargetAppAsync(string GamePath, string accountName, string accountPassword)
         {
-            MyIni.Write("AccountName", accountName, Section);
-            MyIni.Write("AccountPassword", accountPassword, Section);
 
             using (Process apepProcess = new Process())
             {
                 apepProcess.StartInfo.FileName = "apep.exe";
+         
+                if (string.IsNullOrEmpty(accountName) || string.IsNullOrEmpty(accountPassword) || string.IsNullOrEmpty(GamePath))
+                {
+                    string errorMessage = string.Empty;
+                    if (string.IsNullOrEmpty(GamePath))
+                    {
+                        errorMessage = "Game Path";
+                    }                 
+                    if (string.IsNullOrEmpty(accountName))
+                    {
+                        errorMessage = "Login";
+                    }
+                    if (string.IsNullOrEmpty(accountPassword))
+                    {
+                        errorMessage += string.IsNullOrEmpty(errorMessage) ? "Password" : " and Password";
+                    }
+                    MessageBox.Show($"{errorMessage} not set!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                string formattedGamePath = GamePath.Replace("/", "\\");
+
+                string arguments = $"-exec=\"{formattedGamePath}\"";
+
+                // Add additional arguments based on checkbox states
+                if (MoP_AltInjection_c.Checked)
+                {
+                    arguments += " -mopAltInjection";
+                }
+
+                if (wotlk_WardenLog_c.Checked)
+                {
+                    arguments += " -wardenLog";
+                }
+
+                if (SymLinkByPass_c.Checked)
+                {
+                    arguments += " -noSymLink";
+                }
+ 
+                arguments += $" -user=\"{accountName}\"";
+                arguments += $" -pwd=\"{accountPassword}\"";
+
+                apepProcess.StartInfo.Arguments = arguments;
+                await Console.Out.WriteLineAsync(arguments);
                 apepProcess.Start();
 
                 await Task.Run(() => apepProcess.WaitForExit());
@@ -176,11 +271,12 @@ namespace multipep
                 if (row.Cells["Selected"].Value is bool selected && selected)
                 {
                     string accountName = row.Cells["Login"].Value.ToString();
+                    string wow = row.Cells["WoW"].Value.ToString();
                     string accountPassword = ShowPwd.Checked ? row.Cells["Password"].Value.ToString() : GetAccountPassword(accountName);
 
                     try
                     {
-                        await LaunchTargetAppAsync(accountName, accountPassword);
+                        await LaunchTargetAppAsync(wow, accountName, accountPassword);
                     }
                     catch (Exception ex)
                     {
@@ -208,6 +304,7 @@ namespace multipep
                 loginColumn.ReadOnly = false;
                 passwordColumn.ReadOnly = false;
                 noteColumn.ReadOnly = false;
+                WoWColumn.ReadOnly = false;
                 RemoveAccount.Enabled = true;
             }
             else
@@ -215,6 +312,7 @@ namespace multipep
                 loginColumn.ReadOnly = true;
                 passwordColumn.ReadOnly = true;
                 noteColumn.ReadOnly = true;
+                WoWColumn.ReadOnly = true;
                 RemoveAccount.Enabled = false;
             }
 
@@ -226,16 +324,18 @@ namespace multipep
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
             {
                 DataGridViewRow row = DataTable.Rows[e.RowIndex];
-                string login = row.Cells["Login"].Value.ToString();
-                string password = row.Cells["Password"].Value.ToString();
-                string note = row.Cells["Note"].Value.ToString();
-                bool selected = (bool)row.Cells["Selected"].Value;
+                string login = row.Cells["Login"].Value != null ? row.Cells["Login"].Value.ToString() : "";
+                string password = row.Cells["Password"].Value != null ? row.Cells["Password"].Value.ToString() : "";
+                string note = row.Cells["Note"].Value != null ? row.Cells["Note"].Value.ToString() : "";
+                string WoW = row.Cells["WoW"].Value != null ? row.Cells["WoW"].Value.ToString() : "";
+                bool selected = row.Cells["Selected"].Value != null ? (bool)row.Cells["Selected"].Value : false;
 
                 Account account = accounts[e.RowIndex];
                 if (ShowPwd.Checked)
                 {
                     account.Login = login;
                     account.Password = password;
+                    account.WoW = WoW;
                     account.Note = note;
                 }
                 account.Selected = selected;
@@ -258,6 +358,15 @@ namespace multipep
         {
             this.Close();
         }
+
+
+
+        private void SelectWoW_Click(object sender, EventArgs e)
+        {
+            var path = Api.Get_FolderPath();
+            var path_exe = Api.Get_Exe();
+            textBox4.Text = $"{path}/{path_exe}";
+        }
     }
 
     public class Account
@@ -265,6 +374,7 @@ namespace multipep
         public bool Selected { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
+        public string WoW { get; set; }
         public string Note { get; set; }
     }
 
