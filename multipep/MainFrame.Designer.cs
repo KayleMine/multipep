@@ -51,6 +51,7 @@
             this.siticoneCircleButton1 = new Siticone.UI.WinForms.SiticoneCircleButton();
             this.DataTable = new System.Windows.Forms.DataGridView();
             this.label5 = new System.Windows.Forms.Label();
+            this.novoice_c = new Siticone.UI.WinForms.SiticoneCheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.siticoneCirclePictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DataTable)).BeginInit();
             this.SuspendLayout();
@@ -345,6 +346,26 @@
             this.label5.TabIndex = 23;
             this.label5.Text = "  * All of this apply to all start sequence.";
             // 
+            // novoice_c
+            // 
+            this.novoice_c.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.novoice_c.AutoSize = true;
+            this.novoice_c.CheckedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.novoice_c.CheckedState.BorderRadius = 2;
+            this.novoice_c.CheckedState.BorderThickness = 0;
+            this.novoice_c.CheckedState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.novoice_c.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(198)))));
+            this.novoice_c.Location = new System.Drawing.Point(293, 385);
+            this.novoice_c.Name = "novoice_c";
+            this.novoice_c.Size = new System.Drawing.Size(70, 17);
+            this.novoice_c.TabIndex = 24;
+            this.novoice_c.Text = "No Voice";
+            this.novoice_c.UncheckedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(125)))), ((int)(((byte)(137)))), ((int)(((byte)(149)))));
+            this.novoice_c.UncheckedState.BorderRadius = 2;
+            this.novoice_c.UncheckedState.BorderThickness = 0;
+            this.novoice_c.UncheckedState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(125)))), ((int)(((byte)(137)))), ((int)(((byte)(149)))));
+            this.novoice_c.UseVisualStyleBackColor = true;
+            // 
             // MainFrame
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -352,6 +373,7 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(788, 443);
+            this.Controls.Add(this.novoice_c);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.DataTable);
             this.Controls.Add(this.siticoneCircleButton1);
@@ -408,6 +430,7 @@
         private Siticone.UI.WinForms.SiticoneCircleButton siticoneCircleButton1;
         private System.Windows.Forms.DataGridView DataTable;
         private System.Windows.Forms.Label label5;
+        private Siticone.UI.WinForms.SiticoneCheckBox novoice_c;
     }
 }
 

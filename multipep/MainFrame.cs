@@ -56,6 +56,7 @@ namespace multipep
             toolTip1.SetToolTip(this.SymLinkByPass_c, "For those who have problems\nWith Symbolic Link's writing permissions.");
             toolTip1.SetToolTip(this.MoP_AltInjection_c, "Alernative method of injection, only for MoP.");
             toolTip1.SetToolTip(this.wotlk_WardenLog_c, "Who that pokemon?");
+            toolTip1.SetToolTip(this.novoice_c, "No apep sound?");
 
         }
 
@@ -253,11 +254,15 @@ namespace multipep
                     arguments += " -noSymLink";
                 }
  
+                if (novoice_c.Checked)
+                {
+                    arguments += " -noVoice";
+                }
+ 
                 arguments += $" -user=\"{accountName}\"";
                 arguments += $" -pwd=\"{accountPassword}\"";
 
                 apepProcess.StartInfo.Arguments = arguments;
-                await Console.Out.WriteLineAsync(arguments);
                 apepProcess.Start();
 
                 await Task.Run(() => apepProcess.WaitForExit());
