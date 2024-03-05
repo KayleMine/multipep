@@ -146,7 +146,7 @@ namespace multipep
                 }
                 else
                 {
-                    DataTable.Rows.Add(account.Selected, account.Login, "********", account.WoW, account.Apep, account.Note);
+                    DataTable.Rows.Add(account.Selected, account.Login, "********", "WoW", "Apep", account.Note);
                 }
             }
         }
@@ -326,6 +326,7 @@ namespace multipep
                 passwordColumn.ReadOnly = false;
                 noteColumn.ReadOnly = false;
                 WoWColumn.ReadOnly = false;
+                ApepColumn.ReadOnly = false;
                 RemoveAccount.Enabled = true;
             }
             else
