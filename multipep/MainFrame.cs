@@ -34,6 +34,7 @@ namespace multipep
         private DataGridViewTextBoxColumn noteColumn = new DataGridViewTextBoxColumn();
         private DataGridViewCheckBoxColumn checkboxColumn = new DataGridViewCheckBoxColumn();
         private DataGridViewTextBoxColumn WoWColumn = new DataGridViewTextBoxColumn();
+        private DataGridViewTextBoxColumn ApepColumn = new DataGridViewTextBoxColumn();
         private RunAsLibrary.Api Api = new RunAsLibrary.Api();
         private ToolTip toolTip1 = new ToolTip();
         public MainFrame()
@@ -57,6 +58,8 @@ namespace multipep
             toolTip1.SetToolTip(this.MoP_AltInjection_c, "Alernative method of injection, only for MoP.");
             toolTip1.SetToolTip(this.wotlk_WardenLog_c, "Who that pokemon?");
             toolTip1.SetToolTip(this.novoice_c, "No apep sound?");
+            toolTip1.SetToolTip(this.siticoneCircleButton1, "Select path to Wow.exe");
+            toolTip1.SetToolTip(this.SelectApep, "Select path to Apep.exe");
 
         }
 
@@ -93,8 +96,14 @@ namespace multipep
             WoWColumn.HeaderText = "WoW";
             WoWColumn.Name = "WoW";
             WoWColumn.ReadOnly = true;
-            WoWColumn.Width = 205;
+            WoWColumn.Width = 140;
             DataTable.Columns.Add(WoWColumn);
+
+            ApepColumn.HeaderText = "Apep";
+            ApepColumn.Name = "Apep";
+            ApepColumn.ReadOnly = true;
+            ApepColumn.Width = 140;
+            DataTable.Columns.Add(ApepColumn);
 
             noteColumn.HeaderText = "Note";
             noteColumn.Name = "Note";
@@ -133,11 +142,11 @@ namespace multipep
             {
                 if (ShowPwd.Checked)
                 {
-                    DataTable.Rows.Add(account.Selected, account.Login, account.Password, account.WoW, account.Note);
+                    DataTable.Rows.Add(account.Selected, account.Login, account.Password, account.WoW,  account.Apep, account.Note);
                 }
                 else
                 {
-                    DataTable.Rows.Add(account.Selected, account.Login, "********", account.WoW, account.Note);
+                    DataTable.Rows.Add(account.Selected, account.Login, "********", account.WoW, account.Apep, account.Note);
                 }
             }
         }
@@ -197,7 +206,8 @@ namespace multipep
                 Login = textBox1.Text,
                 Password = textBox2.Text,
                 Note = textBox3.Text,
-                WoW = textBox4.Text
+                WoW = textBox4.Text,
+                Apep = textBox5.Text
             });
             SaveAccounts();
             RefreshTable();
@@ -208,16 +218,20 @@ namespace multipep
             RemoveSelectedAccount();
         }
 
-        private async Task LaunchTargetAppAsync(string GamePath, string accountName, string accountPassword)
+        private async Task LaunchTargetAppAsync(string GamePath, string Apep, string accountName, string accountPassword)
         {
 
             using (Process apepProcess = new Process())
             {
-                apepProcess.StartInfo.FileName = "apep.exe";
+               
          
-                if (string.IsNullOrEmpty(accountName) || string.IsNullOrEmpty(accountPassword) || string.IsNullOrEmpty(GamePath))
+                if (string.IsNullOrEmpty(Apep) || string.IsNullOrEmpty(accountName) || string.IsNullOrEmpty(accountPassword) || string.IsNullOrEmpty(GamePath))
                 {
                     string errorMessage = string.Empty;
+                    if (string.IsNullOrEmpty(Apep))
+                    {
+                        errorMessage = "Apep Path";
+                    }                       
                     if (string.IsNullOrEmpty(GamePath))
                     {
                         errorMessage = "Game Path";
@@ -233,6 +247,7 @@ namespace multipep
                     MessageBox.Show($"{errorMessage} not set!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
+                apepProcess.StartInfo.FileName = Apep.Replace("/", "\\");
 
                 string formattedGamePath = GamePath.Replace("/", "\\");
 
@@ -277,11 +292,12 @@ namespace multipep
                 {
                     string accountName = row.Cells["Login"].Value.ToString();
                     string wow = row.Cells["WoW"].Value.ToString();
+                    string apep = row.Cells["Apep"].Value.ToString();
                     string accountPassword = ShowPwd.Checked ? row.Cells["Password"].Value.ToString() : GetAccountPassword(accountName);
 
                     try
                     {
-                        await LaunchTargetAppAsync(wow, accountName, accountPassword);
+                        await LaunchTargetAppAsync(wow, apep, accountName, accountPassword);
                     }
                     catch (Exception ex)
                     {
@@ -333,6 +349,7 @@ namespace multipep
                 string password = row.Cells["Password"].Value != null ? row.Cells["Password"].Value.ToString() : "";
                 string note = row.Cells["Note"].Value != null ? row.Cells["Note"].Value.ToString() : "";
                 string WoW = row.Cells["WoW"].Value != null ? row.Cells["WoW"].Value.ToString() : "";
+                string Apep = row.Cells["Apep"].Value != null ? row.Cells["Apep"].Value.ToString() : "";
                 bool selected = row.Cells["Selected"].Value != null ? (bool)row.Cells["Selected"].Value : false;
 
                 Account account = accounts[e.RowIndex];
@@ -341,6 +358,7 @@ namespace multipep
                     account.Login = login;
                     account.Password = password;
                     account.WoW = WoW;
+                    account.Apep = Apep;
                     account.Note = note;
                 }
                 account.Selected = selected;
@@ -372,6 +390,13 @@ namespace multipep
             var path_exe = Api.Get_Exe();
             textBox4.Text = $"{path}/{path_exe}";
         }
+
+        private void SelectApep_Click(object sender, EventArgs e)
+        {
+            var path = Api.Get_FolderPath();
+            var path_exe = Api.Get_Exe();
+            textBox5.Text = $"{path}/{path_exe}";
+        }
     }
 
     public class Account
@@ -380,6 +405,7 @@ namespace multipep
         public string Login { get; set; }
         public string Password { get; set; }
         public string WoW { get; set; }
+        public string Apep { get; set; }
         public string Note { get; set; }
     }
 
