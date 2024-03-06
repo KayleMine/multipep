@@ -276,7 +276,7 @@ namespace multipep
  
                 arguments += $" -user=\"{accountName}\"";
                 arguments += $" -pwd=\"{accountPassword}\"";
-
+                await Console.Out.WriteLineAsync(arguments);
                 apepProcess.StartInfo.Arguments = arguments;
                 apepProcess.Start();
 
@@ -291,9 +291,10 @@ namespace multipep
                 if (row.Cells["Selected"].Value is bool selected && selected)
                 {
                     string accountName = row.Cells["Login"].Value.ToString();
-                    string wow = row.Cells["WoW"].Value.ToString();
+                   // string wow = row.Cells["WoW"].Value.ToString();
                     string apep = row.Cells["Apep"].Value.ToString();
                     string accountPassword = ShowPwd.Checked ? row.Cells["Password"].Value.ToString() : GetAccountPassword(accountName);
+                    string wow = ShowPwd.Checked ? row.Cells["WoW"].Value.ToString() : GetAccountWoW(accountName);
 
                     try
                     {
@@ -316,6 +317,11 @@ namespace multipep
         {
             Account account = accounts.FirstOrDefault(acc => acc.Login == login);
             return account != null ? account.Password : string.Empty;
+        }
+        private string GetAccountWoW(string login)
+        {
+            Account account = accounts.FirstOrDefault(acc => acc.Login == login);
+            return account != null ? account.WoW : string.Empty;
         }
 
         private void ShowPwd_CheckedChanged(object sender, EventArgs e)
@@ -398,6 +404,7 @@ namespace multipep
             var path_exe = Api.Get_Exe();
             textBox5.Text = $"{path}/{path_exe}";
         }
+
     }
 
     public class Account
