@@ -60,6 +60,7 @@ namespace multipep
             toolTip1.SetToolTip(this.novoice_c, "No apep sound?");
             toolTip1.SetToolTip(this.siticoneCircleButton1, "Select path to Wow.exe");
             toolTip1.SetToolTip(this.SelectApep, "Select path to Apep.exe");
+            toolTip1.SetToolTip(this.no_crc_c, "Disables CRC check.");
 
         }
 
@@ -69,7 +70,7 @@ namespace multipep
             DataTable.AllowUserToAddRows = false;
             DataTable.AllowUserToResizeRows = false;
             DataTable.AllowUserToResizeColumns = false;
-      
+
             checkboxColumn.HeaderText = "Selected";
             checkboxColumn.Name = "Selected";
             checkboxColumn.Width = 40;
@@ -142,7 +143,7 @@ namespace multipep
             {
                 if (ShowPwd.Checked)
                 {
-                    DataTable.Rows.Add(account.Selected, account.Login, account.Password, account.WoW,  account.Apep, account.Note);
+                    DataTable.Rows.Add(account.Selected, account.Login, account.Password, account.WoW, account.Apep, account.Note);
                 }
                 else
                 {
@@ -223,19 +224,19 @@ namespace multipep
 
             using (Process apepProcess = new Process())
             {
-               
-         
+
+
                 if (string.IsNullOrEmpty(Apep) || string.IsNullOrEmpty(accountName) || string.IsNullOrEmpty(accountPassword) || string.IsNullOrEmpty(GamePath))
                 {
                     string errorMessage = string.Empty;
                     if (string.IsNullOrEmpty(Apep))
                     {
                         errorMessage = "Apep Path";
-                    }                       
+                    }
                     if (string.IsNullOrEmpty(GamePath))
                     {
                         errorMessage = "Game Path";
-                    }                 
+                    }
                     if (string.IsNullOrEmpty(accountName))
                     {
                         errorMessage = "Login";
@@ -268,15 +269,20 @@ namespace multipep
                 {
                     arguments += " -noSymLink";
                 }
- 
+
                 if (novoice_c.Checked)
                 {
                     arguments += " -noVoice";
                 }
- 
+
+                if (no_crc_c.Checked)
+                {
+                    arguments += " -noCrc";
+                }
+
                 arguments += $" -user=\"{accountName}\"";
                 arguments += $" -pwd=\"{accountPassword}\"";
-                await Console.Out.WriteLineAsync(arguments);
+             //   await Console.Out.WriteLineAsync(arguments);
                 apepProcess.StartInfo.Arguments = arguments;
                 apepProcess.Start();
 
@@ -291,7 +297,7 @@ namespace multipep
                 if (row.Cells["Selected"].Value is bool selected && selected)
                 {
                     string accountName = row.Cells["Login"].Value.ToString();
-                   // string wow = row.Cells["WoW"].Value.ToString();
+                    // string wow = row.Cells["WoW"].Value.ToString();
                     string apep = row.Cells["Apep"].Value.ToString();
                     string accountPassword = ShowPwd.Checked ? row.Cells["Password"].Value.ToString() : GetAccountPassword(accountName);
                     string wow = ShowPwd.Checked ? row.Cells["WoW"].Value.ToString() : GetAccountWoW(accountName);
@@ -388,8 +394,6 @@ namespace multipep
         {
             this.Close();
         }
-
-
 
         private void SelectWoW_Click(object sender, EventArgs e)
         {

@@ -55,6 +55,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.SelectApep = new Siticone.UI.WinForms.SiticoneCircleButton();
+            this.no_crc_c = new Siticone.UI.WinForms.SiticoneCheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.siticoneCirclePictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DataTable)).BeginInit();
             this.SuspendLayout();
@@ -348,7 +349,7 @@
             this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label5.AutoSize = true;
             this.label5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(198)))));
-            this.label5.Location = new System.Drawing.Point(181, 462);
+            this.label5.Location = new System.Drawing.Point(255, 462);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(191, 13);
             this.label5.TabIndex = 23;
@@ -417,6 +418,26 @@
             this.SelectApep.Text = "S";
             this.SelectApep.Click += new System.EventHandler(this.SelectApep_Click);
             // 
+            // no_crc_c
+            // 
+            this.no_crc_c.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.no_crc_c.AutoSize = true;
+            this.no_crc_c.CheckedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.no_crc_c.CheckedState.BorderRadius = 2;
+            this.no_crc_c.CheckedState.BorderThickness = 0;
+            this.no_crc_c.CheckedState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.no_crc_c.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(198)))));
+            this.no_crc_c.Location = new System.Drawing.Point(184, 458);
+            this.no_crc_c.Name = "no_crc_c";
+            this.no_crc_c.Size = new System.Drawing.Size(65, 17);
+            this.no_crc_c.TabIndex = 28;
+            this.no_crc_c.Text = "No CRC";
+            this.no_crc_c.UncheckedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(125)))), ((int)(((byte)(137)))), ((int)(((byte)(149)))));
+            this.no_crc_c.UncheckedState.BorderRadius = 2;
+            this.no_crc_c.UncheckedState.BorderThickness = 0;
+            this.no_crc_c.UncheckedState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(125)))), ((int)(((byte)(137)))), ((int)(((byte)(149)))));
+            this.no_crc_c.UseVisualStyleBackColor = true;
+            // 
             // MainFrame
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -424,6 +445,7 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(886, 493);
+            this.Controls.Add(this.no_crc_c);
             this.Controls.Add(this.SelectApep);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.textBox5);
@@ -488,6 +510,7 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox textBox5;
         private Siticone.UI.WinForms.SiticoneCircleButton SelectApep;
+        private Siticone.UI.WinForms.SiticoneCheckBox no_crc_c;
     }
 }
 
