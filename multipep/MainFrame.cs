@@ -92,6 +92,7 @@ namespace multipep
             passwordColumn.Name = "Password";
             passwordColumn.ReadOnly = true;
             passwordColumn.Width = 100;
+            passwordColumn.Visible = false;
             DataTable.Columns.Add(passwordColumn);
 
             WoWColumn.HeaderText = "WoW";
@@ -99,17 +100,18 @@ namespace multipep
             WoWColumn.ReadOnly = true;
             WoWColumn.Width = 140;
             DataTable.Columns.Add(WoWColumn);
+            WoWColumn.Visible = false;
 
             ApepColumn.HeaderText = "Apep";
             ApepColumn.Name = "Apep";
             ApepColumn.ReadOnly = true;
             ApepColumn.Width = 140;
             DataTable.Columns.Add(ApepColumn);
+            ApepColumn.Visible = false;
 
             noteColumn.HeaderText = "Note";
             noteColumn.Name = "Note";
             noteColumn.ReadOnly = true;
-            noteColumn.Width = 143;
             DataTable.Columns.Add(noteColumn);
 
             accountsBindingList = new BindingList<Account>(accounts);
@@ -340,6 +342,10 @@ namespace multipep
                 WoWColumn.ReadOnly = false;
                 ApepColumn.ReadOnly = false;
                 RemoveAccount.Enabled = true;
+                WoWColumn.Visible = true;
+                ApepColumn.Visible = true;
+                passwordColumn.Visible = true;
+                noteColumn.Width = 143;
             }
             else
             {
@@ -348,6 +354,10 @@ namespace multipep
                 noteColumn.ReadOnly = true;
                 WoWColumn.ReadOnly = true;
                 RemoveAccount.Enabled = false;
+                WoWColumn.Visible = false;
+                ApepColumn.Visible = false;
+                passwordColumn.Visible = false;
+                noteColumn.Width = 250;
             }
 
             RefreshTable();
@@ -409,6 +419,10 @@ namespace multipep
             textBox5.Text = $"{path}/{path_exe}";
         }
 
+        private void Resizer_btn_Click(object sender, EventArgs e)
+        {
+            Seth.lib.WindowResizer.ResizeWowWindows();
+        }
     }
 
     public class Account

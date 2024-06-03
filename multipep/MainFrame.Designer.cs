@@ -56,6 +56,7 @@
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.SelectApep = new Siticone.UI.WinForms.SiticoneCircleButton();
             this.no_crc_c = new Siticone.UI.WinForms.SiticoneCheckBox();
+            this.Resizer_btn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.siticoneCirclePictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DataTable)).BeginInit();
             this.SuspendLayout();
@@ -438,6 +439,20 @@
             this.no_crc_c.UncheckedState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(125)))), ((int)(((byte)(137)))), ((int)(((byte)(149)))));
             this.no_crc_c.UseVisualStyleBackColor = true;
             // 
+            // Resizer_btn
+            // 
+            this.Resizer_btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Resizer_btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.Resizer_btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.Resizer_btn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(198)))));
+            this.Resizer_btn.Location = new System.Drawing.Point(704, 396);
+            this.Resizer_btn.Name = "Resizer_btn";
+            this.Resizer_btn.Size = new System.Drawing.Size(170, 33);
+            this.Resizer_btn.TabIndex = 29;
+            this.Resizer_btn.Text = "Resize windows";
+            this.Resizer_btn.UseVisualStyleBackColor = false;
+            this.Resizer_btn.Click += new System.EventHandler(this.Resizer_btn_Click);
+            // 
             // MainFrame
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -445,6 +460,7 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(886, 493);
+            this.Controls.Add(this.Resizer_btn);
             this.Controls.Add(this.no_crc_c);
             this.Controls.Add(this.SelectApep);
             this.Controls.Add(this.label6);
@@ -511,6 +527,7 @@
         private System.Windows.Forms.TextBox textBox5;
         private Siticone.UI.WinForms.SiticoneCircleButton SelectApep;
         private Siticone.UI.WinForms.SiticoneCheckBox no_crc_c;
+        private System.Windows.Forms.Button Resizer_btn;
     }
 }
 
