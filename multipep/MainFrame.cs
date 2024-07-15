@@ -232,7 +232,7 @@ namespace multipep
 
         private async Task LaunchTargetAppAsync(string GamePath, string MmapsPath, string Apep, string accountName, string accountPassword)
         {
-
+      
             using (Process apepProcess = new Process())
             {
 
@@ -299,7 +299,7 @@ namespace multipep
 
                 arguments += $" -user=\"{accountName}\"";
                 arguments += $" -pwd=\"{accountPassword}\"";
-                await Console.Out.WriteLineAsync(arguments);
+                await Console.Out.WriteLineAsync(apepProcess.StartInfo.FileName + " " + arguments);
                 apepProcess.StartInfo.Arguments = arguments;
                 apepProcess.Start();
 
@@ -314,18 +314,15 @@ namespace multipep
                 if (row.Cells["Selected"].Value is bool selected && selected)
                 {
                     string accountName = row.Cells["Login"].Value.ToString();
-                    // string wow = row.Cells["WoW"].Value.ToString();
-                    string apep = row.Cells["Apep"].Value.ToString();
-                    //string MmapsPath = row.Cells["Mmaps"].Value.ToString();
+                    string apep = ShowPwd.Checked ? row.Cells["Apep"].Value.ToString() : GetAccountApep(accountName);
                     string accountPassword = ShowPwd.Checked ? row.Cells["Password"].Value.ToString() : GetAccountPassword(accountName);
                     string wow = ShowPwd.Checked ? row.Cells["WoW"].Value.ToString() : GetAccountWoW(accountName);
-                    string MmapsPath = ShowPwd.Checked ? row.Cells["WoW"].Value.ToString() : GetMmapsWoW(accountName);
+                    string MmapsPath = ShowPwd.Checked ? row.Cells["Mmaps"].Value.ToString() : GetMmapsWoW(accountName);
 
                     try
                     {
-                        Console.Out.WriteLine(wow, MmapsPath, apep, accountName, accountPassword);
                         if (!string.IsNullOrEmpty(MmapsPath))
-                        await LaunchTargetAppAsync(wow, MmapsPath, apep, accountName, accountPassword);
+                            await LaunchTargetAppAsync(wow, MmapsPath, apep, accountName, accountPassword);
                         else
                             await LaunchTargetAppAsync(wow, null, apep, accountName, accountPassword);
                     }
@@ -346,6 +343,11 @@ namespace multipep
         {
             Account account = accounts.FirstOrDefault(acc => acc.Login == login);
             return account != null ? account.Password : string.Empty;
+        }
+        private string GetAccountApep(string login)
+        {
+            Account account = accounts.FirstOrDefault(acc => acc.Login == login);
+            return account != null ? account.Apep : string.Empty;
         }
         private string GetAccountWoW(string login)
         {
