@@ -316,14 +316,16 @@ namespace multipep
                     string accountName = row.Cells["Login"].Value.ToString();
                     // string wow = row.Cells["WoW"].Value.ToString();
                     string apep = row.Cells["Apep"].Value.ToString();
-                    string MmapsPath = row.Cells["Mmaps"].Value.ToString();
+                    //string MmapsPath = row.Cells["Mmaps"].Value.ToString();
                     string accountPassword = ShowPwd.Checked ? row.Cells["Password"].Value.ToString() : GetAccountPassword(accountName);
                     string wow = ShowPwd.Checked ? row.Cells["WoW"].Value.ToString() : GetAccountWoW(accountName);
+                    string MmapsPath = ShowPwd.Checked ? row.Cells["WoW"].Value.ToString() : GetMmapsWoW(accountName);
 
                     try
                     {
+                        Console.Out.WriteLine(wow, MmapsPath, apep, accountName, accountPassword);
                         if (!string.IsNullOrEmpty(MmapsPath))
-                            await LaunchTargetAppAsync(wow, MmapsPath, apep, accountName, accountPassword);
+                        await LaunchTargetAppAsync(wow, MmapsPath, apep, accountName, accountPassword);
                         else
                             await LaunchTargetAppAsync(wow, null, apep, accountName, accountPassword);
                     }
@@ -350,6 +352,11 @@ namespace multipep
             Account account = accounts.FirstOrDefault(acc => acc.Login == login);
             return account != null ? account.WoW : string.Empty;
         }
+        private string GetMmapsWoW(string login)
+        {
+            Account account = accounts.FirstOrDefault(acc => acc.Login == login);
+            return account != null ? account.Mmaps : string.Empty;
+        }
 
         private void ShowPwd_CheckedChanged(object sender, EventArgs e)
         {
@@ -374,10 +381,11 @@ namespace multipep
                 passwordColumn.ReadOnly = true;
                 noteColumn.ReadOnly = true;
                 WoWColumn.ReadOnly = true;
+                MmapsColumn.ReadOnly = true;
+
                 RemoveAccount.Enabled = false;
                 WoWColumn.Visible = false;
                 ApepColumn.Visible = false;
-                MmapsColumn.ReadOnly = true;
                 MmapsColumn.Visible = false;
                 passwordColumn.Visible = false;
                 noteColumn.Width = 250;

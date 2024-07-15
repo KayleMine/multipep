@@ -232,6 +232,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="seth_.ico" />
     <None Include="Resources\seth copy.png" />
     <Content Include="seth.ico" />
   </ItemGroup>
