@@ -35,6 +35,7 @@ namespace multipep
         private DataGridViewCheckBoxColumn checkboxColumn = new DataGridViewCheckBoxColumn();
         private DataGridViewTextBoxColumn WoWColumn = new DataGridViewTextBoxColumn();
         private DataGridViewTextBoxColumn ApepColumn = new DataGridViewTextBoxColumn();
+        private DataGridViewTextBoxColumn MmapsColumn = new DataGridViewTextBoxColumn();
         private RunAsLibrary.Api Api = new RunAsLibrary.Api();
         private ToolTip toolTip1 = new ToolTip();
         public MainFrame()
@@ -109,6 +110,13 @@ namespace multipep
             DataTable.Columns.Add(ApepColumn);
             ApepColumn.Visible = false;
 
+            MmapsColumn.HeaderText = "Mmaps";
+            MmapsColumn.Name = "Mmaps";
+            MmapsColumn.ReadOnly = true;
+            MmapsColumn.Width = 140;
+            DataTable.Columns.Add(MmapsColumn);
+            MmapsColumn.Visible = false;
+
             noteColumn.HeaderText = "Note";
             noteColumn.Name = "Note";
             noteColumn.ReadOnly = true;
@@ -145,11 +153,11 @@ namespace multipep
             {
                 if (ShowPwd.Checked)
                 {
-                    DataTable.Rows.Add(account.Selected, account.Login, account.Password, account.WoW, account.Apep, account.Note);
+                    DataTable.Rows.Add(account.Selected, account.Login, account.Password, account.WoW, account.Apep,  account.Mmaps, account.Note);
                 }
                 else
                 {
-                    DataTable.Rows.Add(account.Selected, account.Login, "********", "WoW", "Apep", account.Note);
+                    DataTable.Rows.Add(account.Selected, account.Login, "********", "WoW", "Apep", "Mmaps", account.Note);
                 }
             }
         }
@@ -210,8 +218,9 @@ namespace multipep
                 Password = textBox2.Text,
                 Note = textBox3.Text,
                 WoW = textBox4.Text,
-                Apep = textBox5.Text
-            });
+                Apep = textBox5.Text,
+                Mmaps = textBox6.Text
+        });
             SaveAccounts();
             RefreshTable();
         }
@@ -221,7 +230,7 @@ namespace multipep
             RemoveSelectedAccount();
         }
 
-        private async Task LaunchTargetAppAsync(string GamePath, string Apep, string accountName, string accountPassword)
+        private async Task LaunchTargetAppAsync(string GamePath, string MmapsPath, string Apep, string accountName, string accountPassword)
         {
 
             using (Process apepProcess = new Process())
@@ -257,6 +266,12 @@ namespace multipep
                 string arguments = $"-exec=\"{formattedGamePath}\"";
 
                 // Add additional arguments based on checkbox states
+                if (!string.IsNullOrEmpty(MmapsPath))
+                {
+                    string formattedMmapsPath = MmapsPath.Replace("/", "\\");
+                    arguments += $" -mmaps=\"{formattedMmapsPath}\"";
+                }
+
                 if (MoP_AltInjection_c.Checked)
                 {
                     arguments += " -mopAltInjection";
@@ -284,7 +299,7 @@ namespace multipep
 
                 arguments += $" -user=\"{accountName}\"";
                 arguments += $" -pwd=\"{accountPassword}\"";
-             //   await Console.Out.WriteLineAsync(arguments);
+                await Console.Out.WriteLineAsync(arguments);
                 apepProcess.StartInfo.Arguments = arguments;
                 apepProcess.Start();
 
@@ -301,12 +316,16 @@ namespace multipep
                     string accountName = row.Cells["Login"].Value.ToString();
                     // string wow = row.Cells["WoW"].Value.ToString();
                     string apep = row.Cells["Apep"].Value.ToString();
+                    string MmapsPath = row.Cells["Mmaps"].Value.ToString();
                     string accountPassword = ShowPwd.Checked ? row.Cells["Password"].Value.ToString() : GetAccountPassword(accountName);
                     string wow = ShowPwd.Checked ? row.Cells["WoW"].Value.ToString() : GetAccountWoW(accountName);
 
                     try
                     {
-                        await LaunchTargetAppAsync(wow, apep, accountName, accountPassword);
+                        if (!string.IsNullOrEmpty(MmapsPath))
+                            await LaunchTargetAppAsync(wow, MmapsPath, apep, accountName, accountPassword);
+                        else
+                            await LaunchTargetAppAsync(wow, null, apep, accountName, accountPassword);
                     }
                     catch (Exception ex)
                     {
@@ -341,9 +360,11 @@ namespace multipep
                 noteColumn.ReadOnly = false;
                 WoWColumn.ReadOnly = false;
                 ApepColumn.ReadOnly = false;
+                MmapsColumn.ReadOnly = false;
                 RemoveAccount.Enabled = true;
                 WoWColumn.Visible = true;
                 ApepColumn.Visible = true;
+                MmapsColumn.Visible = true;
                 passwordColumn.Visible = true;
                 noteColumn.Width = 143;
             }
@@ -356,6 +377,8 @@ namespace multipep
                 RemoveAccount.Enabled = false;
                 WoWColumn.Visible = false;
                 ApepColumn.Visible = false;
+                MmapsColumn.ReadOnly = true;
+                MmapsColumn.Visible = false;
                 passwordColumn.Visible = false;
                 noteColumn.Width = 250;
             }
@@ -373,6 +396,7 @@ namespace multipep
                 string note = row.Cells["Note"].Value != null ? row.Cells["Note"].Value.ToString() : "";
                 string WoW = row.Cells["WoW"].Value != null ? row.Cells["WoW"].Value.ToString() : "";
                 string Apep = row.Cells["Apep"].Value != null ? row.Cells["Apep"].Value.ToString() : "";
+                string MmapsPath = row.Cells["Mmaps"].Value != null ? row.Cells["Mmaps"].Value.ToString() : "";
                 bool selected = row.Cells["Selected"].Value != null ? (bool)row.Cells["Selected"].Value : false;
 
                 Account account = accounts[e.RowIndex];
@@ -382,6 +406,7 @@ namespace multipep
                     account.Password = password;
                     account.WoW = WoW;
                     account.Apep = Apep;
+                    account.Mmaps = MmapsPath;
                     account.Note = note;
                 }
                 account.Selected = selected;
@@ -423,6 +448,12 @@ namespace multipep
         {
             Seth.lib.WindowResizer.ResizeWowWindows();
         }
+
+        private void SelectMmaps_Click(object sender, EventArgs e)
+        {
+            var path = Api.Get_FolderPath();
+            textBox6.Text = $"{path}";
+        }
     }
 
     public class Account
@@ -432,6 +463,7 @@ namespace multipep
         public string Password { get; set; }
         public string WoW { get; set; }
         public string Apep { get; set; }
+        public string Mmaps { get; set; }
         public string Note { get; set; }
     }
 

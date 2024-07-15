@@ -57,6 +57,10 @@
             this.SelectApep = new Siticone.UI.WinForms.SiticoneCircleButton();
             this.no_crc_c = new Siticone.UI.WinForms.SiticoneCheckBox();
             this.Resizer_btn = new System.Windows.Forms.Button();
+            this.SelectMmaps = new Siticone.UI.WinForms.SiticoneCircleButton();
+            this.label7 = new System.Windows.Forms.Label();
+            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.siticoneCirclePictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DataTable)).BeginInit();
             this.SuspendLayout();
@@ -81,7 +85,7 @@
             this.AddAccount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.AddAccount.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.AddAccount.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(198)))));
-            this.AddAccount.Location = new System.Drawing.Point(748, 145);
+            this.AddAccount.Location = new System.Drawing.Point(748, 171);
             this.AddAccount.Name = "AddAccount";
             this.AddAccount.Size = new System.Drawing.Size(100, 25);
             this.AddAccount.TabIndex = 2;
@@ -117,7 +121,7 @@
             this.RemoveAccount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.RemoveAccount.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.RemoveAccount.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(198)))));
-            this.RemoveAccount.Location = new System.Drawing.Point(748, 173);
+            this.RemoveAccount.Location = new System.Drawing.Point(748, 199);
             this.RemoveAccount.Name = "RemoveAccount";
             this.RemoveAccount.Size = new System.Drawing.Size(100, 25);
             this.RemoveAccount.TabIndex = 5;
@@ -130,7 +134,7 @@
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(198)))));
-            this.label1.Location = new System.Drawing.Point(707, 18);
+            this.label1.Location = new System.Drawing.Point(705, 19);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(33, 13);
             this.label1.TabIndex = 6;
@@ -141,7 +145,7 @@
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(198)))));
-            this.label2.Location = new System.Drawing.Point(707, 44);
+            this.label2.Location = new System.Drawing.Point(705, 45);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(41, 13);
             this.label2.TabIndex = 7;
@@ -155,7 +159,7 @@
             this.ShowPwd.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.ShowPwd.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.ShowPwd.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(198)))));
-            this.ShowPwd.Location = new System.Drawing.Point(763, 204);
+            this.ShowPwd.Location = new System.Drawing.Point(763, 230);
             this.ShowPwd.Name = "ShowPwd";
             this.ShowPwd.Size = new System.Drawing.Size(70, 23);
             this.ShowPwd.TabIndex = 8;
@@ -168,11 +172,11 @@
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
             this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(198)))));
-            this.label3.Location = new System.Drawing.Point(707, 122);
+            this.label3.Location = new System.Drawing.Point(705, 147);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(30, 13);
+            this.label3.Size = new System.Drawing.Size(34, 13);
             this.label3.TabIndex = 10;
-            this.label3.Text = "Note";
+            this.label3.Text = "*Note";
             // 
             // textBox3
             // 
@@ -180,7 +184,7 @@
             this.textBox3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.textBox3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(198)))));
-            this.textBox3.Location = new System.Drawing.Point(748, 119);
+            this.textBox3.Location = new System.Drawing.Point(748, 145);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(100, 20);
             this.textBox3.TabIndex = 9;
@@ -277,7 +281,7 @@
             this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
             this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(198)))));
-            this.label4.Location = new System.Drawing.Point(707, 70);
+            this.label4.Location = new System.Drawing.Point(705, 71);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(35, 13);
             this.label4.TabIndex = 20;
@@ -381,7 +385,7 @@
             this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label6.AutoSize = true;
             this.label6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(198)))));
-            this.label6.Location = new System.Drawing.Point(707, 96);
+            this.label6.Location = new System.Drawing.Point(705, 97);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(32, 13);
             this.label6.TabIndex = 26;
@@ -453,6 +457,60 @@
             this.Resizer_btn.UseVisualStyleBackColor = false;
             this.Resizer_btn.Click += new System.EventHandler(this.Resizer_btn_Click);
             // 
+            // SelectMmaps
+            // 
+            this.SelectMmaps.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.SelectMmaps.BorderColor = System.Drawing.Color.BurlyWood;
+            this.SelectMmaps.BorderRadius = 1;
+            this.SelectMmaps.BorderThickness = 1;
+            this.SelectMmaps.CheckedState.Parent = this.SelectMmaps;
+            this.SelectMmaps.CustomImages.Parent = this.SelectMmaps;
+            this.SelectMmaps.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.SelectMmaps.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.SelectMmaps.ForeColor = System.Drawing.SystemColors.Window;
+            this.SelectMmaps.HoveredState.Parent = this.SelectMmaps;
+            this.SelectMmaps.Location = new System.Drawing.Point(854, 119);
+            this.SelectMmaps.Name = "SelectMmaps";
+            this.SelectMmaps.ShadowDecoration.Mode = Siticone.UI.WinForms.Enums.ShadowMode.Circle;
+            this.SelectMmaps.ShadowDecoration.Parent = this.SelectMmaps;
+            this.SelectMmaps.Size = new System.Drawing.Size(20, 20);
+            this.SelectMmaps.TabIndex = 32;
+            this.SelectMmaps.Text = "S";
+            this.SelectMmaps.Click += new System.EventHandler(this.SelectMmaps_Click);
+            // 
+            // label7
+            // 
+            this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label7.AutoSize = true;
+            this.label7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(198)))));
+            this.label7.Location = new System.Drawing.Point(705, 123);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(45, 13);
+            this.label7.TabIndex = 31;
+            this.label7.Text = "*Mmaps";
+            // 
+            // textBox6
+            // 
+            this.textBox6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.textBox6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBox6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(198)))));
+            this.textBox6.Location = new System.Drawing.Point(748, 119);
+            this.textBox6.Name = "textBox6";
+            this.textBox6.Size = new System.Drawing.Size(100, 20);
+            this.textBox6.TabIndex = 30;
+            // 
+            // label8
+            // 
+            this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label8.AutoSize = true;
+            this.label8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(198)))));
+            this.label8.Location = new System.Drawing.Point(761, 256);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(72, 13);
+            this.label8.TabIndex = 33;
+            this.label8.Text = "* Not required";
+            // 
             // MainFrame
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -460,6 +518,9 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(886, 493);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.SelectMmaps);
+            this.Controls.Add(this.textBox6);
             this.Controls.Add(this.Resizer_btn);
             this.Controls.Add(this.no_crc_c);
             this.Controls.Add(this.SelectApep);
@@ -486,6 +547,7 @@
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.AddAccount);
             this.Controls.Add(this.StartAll);
+            this.Controls.Add(this.label7);
             this.Cursor = System.Windows.Forms.Cursors.Cross;
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -528,6 +590,10 @@
         private Siticone.UI.WinForms.SiticoneCircleButton SelectApep;
         private Siticone.UI.WinForms.SiticoneCheckBox no_crc_c;
         private System.Windows.Forms.Button Resizer_btn;
+        private Siticone.UI.WinForms.SiticoneCircleButton SelectMmaps;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.Label label8;
     }
 }
 
