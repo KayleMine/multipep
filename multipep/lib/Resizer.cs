@@ -1,9 +1,10 @@
-﻿using System;
+﻿using multipep;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Seth.lib
@@ -20,6 +21,13 @@ namespace Seth.lib
         [DllImport("user32.dll", SetLastError = true)]
         static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
 
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        static extern bool SetWindowText(IntPtr hWnd, string lpString);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool SetForegroundWindow(IntPtr hWnd);
+
         [StructLayout(LayoutKind.Sequential)]
         public struct RECT
         {
@@ -34,14 +42,14 @@ namespace Seth.lib
             var wowWindows = GetWowWindows();
             if (wowWindows.Length == 0)
             {
-                Console.WriteLine("No World of Warcraft windows found.");
+                new MainFrame().LogMe("No World of Warcraft windows found.");
                 return;
             }
-
+            RenameWowWindows(GetWowWindows());
             ResizeAndRepositionWindows(wowWindows);
         }
 
-        private static IntPtr[] GetWowWindows()
+        public static IntPtr[] GetWowWindows()
         {
             var wowProcesses = Process.GetProcessesByName("wow");
             var windowHandles = new List<IntPtr>();
@@ -56,6 +64,26 @@ namespace Seth.lib
             }
 
             return windowHandles.ToArray();
+        }
+
+        public static void RenameWowWindows(IntPtr[] windows)
+        {
+            for (int i = 0; i < windows.Length; i++)
+            {
+                string windowTitle = $"Wow{i + 1}";
+                SetWindowText(windows[i], windowTitle);
+            }
+        }
+
+        public static void BringWindows()
+        {
+            var wowWindows = GetWowWindows();
+            foreach (var window in wowWindows)
+            {
+                SetForegroundWindow(window);
+                Thread.Sleep(85);
+            }
+           
         }
 
         static void ResizeAndRepositionWindows(IntPtr[] windows)

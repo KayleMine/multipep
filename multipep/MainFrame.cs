@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json;
+using Seth.lib;
+using Siticone.UI.WinForms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,11 +10,8 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static multipep.MainFrame;
 
 namespace multipep
 {
@@ -25,7 +24,14 @@ namespace multipep
         public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
         private const int WM_NCLBUTTONDOWN = 0xA1;
         private const int HT_CAPTION = 0x2;
+        [DllImport("user32.dll")]
+        private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
 
+        private static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
+        private const uint SWP_NOSIZE = 0x0001;
+        private const uint SWP_NOMOVE = 0x0002;
+
+     
         private List<Account> accounts = new List<Account>();
         private BindingList<Account> accountsBindingList;
         private static string Section = "Settings";
@@ -206,6 +212,10 @@ namespace multipep
 
         private void MainFrame_Load(object sender, EventArgs e)
         {
+            new Hider().Hide(this.Handle);
+
+            this.TopMost = true;
+            SetWindowPos(this.Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
             LoadAccounts();
             RefreshTable();
         }
@@ -235,8 +245,6 @@ namespace multipep
       
             using (Process apepProcess = new Process())
             {
-
-
                 if (string.IsNullOrEmpty(Apep) || string.IsNullOrEmpty(accountName) || string.IsNullOrEmpty(accountPassword) || string.IsNullOrEmpty(GamePath))
                 {
                     string errorMessage = string.Empty;
@@ -300,15 +308,43 @@ namespace multipep
                 arguments += $" -user=\"{accountName}\"";
                 arguments += $" -pwd=\"{accountPassword}\"";
                 await Console.Out.WriteLineAsync(apepProcess.StartInfo.FileName + " " + arguments);
+                if (string.IsNullOrWhiteSpace(logbox.Text))
+                {
+                    LogMe($"Starting: {accountName}");
+                }
+                else
+                {
+                    LogMe(Environment.NewLine + $"Starting: {accountName}");
+                }
                 apepProcess.StartInfo.Arguments = arguments;
                 apepProcess.Start();
 
                 await Task.Run(() => apepProcess.WaitForExit());
+                LogMe(Environment.NewLine + $"Done...");
             }
         }
 
         private async Task StartAllAsync()
         {
+            int totalRows = DataTable.Rows.Count;
+            int selectedCount = 0;
+            int launchedCount = 0;
+
+            // Calculate how many items are selected
+            foreach (DataGridViewRow row in DataTable.Rows)
+            {
+                if (row.Cells["Selected"].Value is bool selected && selected)
+                {
+                    selectedCount++;
+                }
+            }
+
+            // Initialize the progress bar
+            siticoneProgressBar1.Minimum = 0;
+            siticoneProgressBar1.Maximum = 100;
+            siticoneProgressBar1.Value = 0;
+
+            // Launch the applications
             foreach (DataGridViewRow row in DataTable.Rows)
             {
                 if (row.Cells["Selected"].Value is bool selected && selected)
@@ -325,6 +361,11 @@ namespace multipep
                             await LaunchTargetAppAsync(wow, MmapsPath, apep, accountName, accountPassword);
                         else
                             await LaunchTargetAppAsync(wow, null, apep, accountName, accountPassword);
+
+                        launchedCount++;
+                        // Update the progress bar
+                        int progressPercentage = (int)((float)launchedCount / selectedCount * 100);
+                        siticoneProgressBar1.Value = progressPercentage;
                     }
                     catch (Exception ex)
                     {
@@ -332,7 +373,14 @@ namespace multipep
                     }
                 }
             }
+
+            // Ensure the progress bar reflects 100% at the end
+            if (selectedCount > 0)
+            {
+                siticoneProgressBar1.Value = 100;
+            }
         }
+
 
         private async void StartAll_Click(object sender, EventArgs e)
         {
@@ -456,13 +504,34 @@ namespace multipep
 
         private void Resizer_btn_Click(object sender, EventArgs e)
         {
-            Seth.lib.WindowResizer.ResizeWowWindows();
+            WindowResizer.ResizeWowWindows();
         }
-
+        private void BringWoW_Click(object sender, EventArgs e)
+        {
+            WindowResizer.BringWindows();
+        }
         private void SelectMmaps_Click(object sender, EventArgs e)
         {
             var path = Api.Get_FolderPath();
             textBox6.Text = $"{path}";
+        }
+        public void LogMe(string text) => logbox.AppendText(text);
+
+        private void label9_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void siticoneWinToggleSwith1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (siticoneWinToggleSwith1.Checked)
+            {
+                new Hider().Unhide(this.Handle);
+            }
+           else
+            {
+                new Hider().Hide(this.Handle);
+            }
         }
     }
 

@@ -61,6 +61,11 @@
             this.label7 = new System.Windows.Forms.Label();
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
+            this.logbox = new Siticone.UI.WinForms.SiticoneTextBox();
+            this.BringWoW = new System.Windows.Forms.Button();
+            this.siticoneProgressBar1 = new Siticone.UI.WinForms.SiticoneProgressBar();
+            this.label9 = new System.Windows.Forms.Label();
+            this.siticoneWinToggleSwith1 = new Siticone.UI.WinForms.SiticoneWinToggleSwith();
             ((System.ComponentModel.ISupportInitialize)(this.siticoneCirclePictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DataTable)).BeginInit();
             this.SuspendLayout();
@@ -71,9 +76,9 @@
             this.StartAll.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.StartAll.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.StartAll.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(198)))));
-            this.StartAll.Location = new System.Drawing.Point(704, 439);
+            this.StartAll.Location = new System.Drawing.Point(708, 435);
             this.StartAll.Name = "StartAll";
-            this.StartAll.Size = new System.Drawing.Size(82, 42);
+            this.StartAll.Size = new System.Drawing.Size(82, 46);
             this.StartAll.TabIndex = 1;
             this.StartAll.Text = "Start selected";
             this.StartAll.UseVisualStyleBackColor = false;
@@ -195,9 +200,9 @@
             this.Exit.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.Exit.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.Exit.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(198)))));
-            this.Exit.Location = new System.Drawing.Point(792, 439);
+            this.Exit.Location = new System.Drawing.Point(796, 435);
             this.Exit.Name = "Exit";
-            this.Exit.Size = new System.Drawing.Size(82, 42);
+            this.Exit.Size = new System.Drawing.Size(82, 46);
             this.Exit.TabIndex = 11;
             this.Exit.Text = "Exit";
             this.Exit.UseVisualStyleBackColor = false;
@@ -449,11 +454,11 @@
             this.Resizer_btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.Resizer_btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.Resizer_btn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(198)))));
-            this.Resizer_btn.Location = new System.Drawing.Point(704, 396);
+            this.Resizer_btn.Location = new System.Drawing.Point(707, 396);
             this.Resizer_btn.Name = "Resizer_btn";
-            this.Resizer_btn.Size = new System.Drawing.Size(170, 33);
+            this.Resizer_btn.Size = new System.Drawing.Size(83, 33);
             this.Resizer_btn.TabIndex = 29;
-            this.Resizer_btn.Text = "Resize windows";
+            this.Resizer_btn.Text = "Place WoW\'s";
             this.Resizer_btn.UseVisualStyleBackColor = false;
             this.Resizer_btn.Click += new System.EventHandler(this.Resizer_btn_Click);
             // 
@@ -511,6 +516,85 @@
             this.label8.TabIndex = 33;
             this.label8.Text = "* Not required";
             // 
+            // logbox
+            // 
+            this.logbox.AutoScroll = true;
+            this.logbox.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(163)))), ((int)(((byte)(168)))), ((int)(((byte)(123)))));
+            this.logbox.BorderStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+            this.logbox.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.logbox.DefaultText = "";
+            this.logbox.DisabledState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(208)))), ((int)(((byte)(208)))));
+            this.logbox.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(226)))), ((int)(((byte)(226)))));
+            this.logbox.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
+            this.logbox.DisabledState.Parent = this.logbox;
+            this.logbox.DisabledState.PlaceholderForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
+            this.logbox.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.logbox.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.logbox.FocusedState.Parent = this.logbox;
+            this.logbox.HoveredState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.logbox.HoveredState.Parent = this.logbox;
+            this.logbox.Location = new System.Drawing.Point(708, 282);
+            this.logbox.Multiline = true;
+            this.logbox.Name = "logbox";
+            this.logbox.PasswordChar = '\0';
+            this.logbox.PlaceholderText = "";
+            this.logbox.ReadOnly = true;
+            this.logbox.SelectedText = "";
+            this.logbox.ShadowDecoration.Parent = this.logbox;
+            this.logbox.Size = new System.Drawing.Size(170, 92);
+            this.logbox.TabIndex = 34;
+            // 
+            // BringWoW
+            // 
+            this.BringWoW.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BringWoW.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.BringWoW.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.BringWoW.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(198)))));
+            this.BringWoW.Location = new System.Drawing.Point(794, 396);
+            this.BringWoW.Name = "BringWoW";
+            this.BringWoW.Size = new System.Drawing.Size(83, 33);
+            this.BringWoW.TabIndex = 35;
+            this.BringWoW.Text = "Bring WoW\'s";
+            this.BringWoW.UseVisualStyleBackColor = false;
+            this.BringWoW.Click += new System.EventHandler(this.BringWoW_Click);
+            // 
+            // siticoneProgressBar1
+            // 
+            this.siticoneProgressBar1.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.siticoneProgressBar1.GradientMode = System.Drawing.Drawing2D.LinearGradientMode.BackwardDiagonal;
+            this.siticoneProgressBar1.Location = new System.Drawing.Point(708, 380);
+            this.siticoneProgressBar1.Name = "siticoneProgressBar1";
+            this.siticoneProgressBar1.ProgressColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(198)))));
+            this.siticoneProgressBar1.ProgressColor2 = System.Drawing.Color.BurlyWood;
+            this.siticoneProgressBar1.ShadowDecoration.Parent = this.siticoneProgressBar1;
+            this.siticoneProgressBar1.Size = new System.Drawing.Size(170, 10);
+            this.siticoneProgressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.siticoneProgressBar1.TabIndex = 36;
+            this.siticoneProgressBar1.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 25.25F);
+            this.label9.ForeColor = System.Drawing.Color.Cornsilk;
+            this.label9.Location = new System.Drawing.Point(854, -12);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(28, 39);
+            this.label9.TabIndex = 37;
+            this.label9.Text = "-";
+            this.label9.Click += new System.EventHandler(this.label9_Click);
+            // 
+            // siticoneWinToggleSwith1
+            // 
+            this.siticoneWinToggleSwith1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.siticoneWinToggleSwith1.CheckedFillColor = System.Drawing.Color.BurlyWood;
+            this.siticoneWinToggleSwith1.Location = new System.Drawing.Point(656, 435);
+            this.siticoneWinToggleSwith1.Name = "siticoneWinToggleSwith1";
+            this.siticoneWinToggleSwith1.Size = new System.Drawing.Size(45, 22);
+            this.siticoneWinToggleSwith1.TabIndex = 38;
+            this.siticoneWinToggleSwith1.Text = "siticoneWinToggleSwith1";
+            this.siticoneWinToggleSwith1.CheckedChanged += new System.EventHandler(this.siticoneWinToggleSwith1_CheckedChanged);
+            // 
             // MainFrame
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -518,6 +602,10 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(886, 493);
+            this.Controls.Add(this.siticoneWinToggleSwith1);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.siticoneProgressBar1);
+            this.Controls.Add(this.BringWoW);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.SelectMmaps);
             this.Controls.Add(this.textBox6);
@@ -548,6 +636,7 @@
             this.Controls.Add(this.AddAccount);
             this.Controls.Add(this.StartAll);
             this.Controls.Add(this.label7);
+            this.Controls.Add(this.logbox);
             this.Cursor = System.Windows.Forms.Cursors.Cross;
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -594,6 +683,11 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox textBox6;
         private System.Windows.Forms.Label label8;
+        private Siticone.UI.WinForms.SiticoneTextBox logbox;
+        private System.Windows.Forms.Button BringWoW;
+        private Siticone.UI.WinForms.SiticoneProgressBar siticoneProgressBar1;
+        private System.Windows.Forms.Label label9;
+        private Siticone.UI.WinForms.SiticoneWinToggleSwith siticoneWinToggleSwith1;
     }
 }
 
