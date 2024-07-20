@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
@@ -39,10 +41,11 @@ namespace Seth.lib
 
         public static void ResizeWowWindows()
         {
+
             var wowWindows = GetWowWindows();
             if (wowWindows.Length == 0)
             {
-                new MainFrame().LogMe("No World of Warcraft windows found.");
+                MessageBox.Show("No World of Warcraft windows found.");
                 return;
             }
             RenameWowWindows(GetWowWindows());
@@ -51,18 +54,26 @@ namespace Seth.lib
 
         public static IntPtr[] GetWowWindows()
         {
-            var wowProcesses = Process.GetProcessesByName("wow");
+            var allProcesses = Process.GetProcesses();
+
+            var wowProcesses = allProcesses.Where(p => p.ProcessName.Equals("wow", StringComparison.OrdinalIgnoreCase)).ToList();
             var windowHandles = new List<IntPtr>();
-
-            foreach (var process in wowProcesses)
+            if (wowProcesses.Any())
             {
-                IntPtr hWnd = process.MainWindowHandle;
-                if (hWnd != IntPtr.Zero)
+                foreach (var process in wowProcesses)
                 {
-                    windowHandles.Add(hWnd);
-                }
+                    IntPtr hWnd = process.MainWindowHandle;
+                    if (hWnd != IntPtr.Zero)
+                    {
+                        windowHandles.Add(hWnd);
+                    }
+                  //  MessageBox.Show($"Found process: {process.ProcessName} (ID: {process.Id})");
+                }               
             }
-
+            else
+            {
+                //MessageBox.Show("No WoW processes found.");
+            }
             return windowHandles.ToArray();
         }
 
@@ -78,6 +89,11 @@ namespace Seth.lib
         public static void BringWindows()
         {
             var wowWindows = GetWowWindows();
+            if (wowWindows.Length == 0)
+            {
+                MessageBox.Show("No World of Warcraft windows found.");
+                return;
+            }
             foreach (var window in wowWindows)
             {
                 SetForegroundWindow(window);
