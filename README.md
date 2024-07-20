@@ -8,6 +8,7 @@ Bored launching two or more accounts every-time?
 There is solution for you :D
 
 Short how-to:
+0. Make sure your world of warcraft .exe are wow.exe or Wow.exe 
 1. Install [Net 4.8](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48) if any error. (*Probably ur win 10 had one build in)
 2. Add accounts.
 
